@@ -29,14 +29,42 @@ namespace IG_Test.Controllers
             return View();
         }
 
+        public IActionResult FeedBack()
+        {
+            var listRating = unitOfWork.IG_Rating_Login_ServiceRepository.GetAll(includeProperties: "IG_Service");
+            return View(listRating);
+        }
+
+        [HttpGet]
+        public IActionResult OrderByTimeStamp(string option)
+        {
+            if (option.Equals("desc"))
+            {
+                var listRating = unitOfWork.IG_Rating_Login_ServiceRepository.GetAll(includeProperties: "IG_Service").OrderByDescending(x=>x.timestamp);
+                return Ok(listRating);
+            }
+            else if (option.Equals("asc"))
+            {
+                var listRating = unitOfWork.IG_Rating_Login_ServiceRepository.GetAll(includeProperties: "IG_Service").OrderBy(x => x.timestamp);
+                return Ok(listRating);
+            }
+            else if (option.Equals("default"))
+            {
+                var listRating = unitOfWork.IG_Rating_Login_ServiceRepository.GetAll(includeProperties: "IG_Service");
+                return Ok(listRating);
+            }
+            return Ok();
+
+        }
+
         [HttpPost]
-        public IActionResult Rate(int point,string feedback)
+        public IActionResult Rate(int point, string feedback)
         {
             var getToken = HttpContext.Session.GetString(Constant_Login.LOGINTOKEN);
-            if(getToken != null && getToken.Length > 0)
+            if (getToken != null && getToken.Length > 0)
             {
                 var getLoginToken = unitOfWork.IG_Login_ServiceRepository.GetFirstOrDefault(x => x.loginToken.Equals(getToken));
-                if(getLoginToken != null)
+                if (getLoginToken != null)
                 {
                     var feedBackItem = new IG_Rating_Login_Service
                     {

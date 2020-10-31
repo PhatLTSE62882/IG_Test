@@ -24,6 +24,7 @@
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav ml-auto flex-grow-1">
+
                         @if (token != null && token.Length > 0)
                         {
                             <li class="ml-80">
@@ -33,10 +34,17 @@
                                         Tùy chọn
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" asp-action="FeedBack" asp-controller="Rating">Xem đánh giá</a>
                                         <a class="dropdown-item" data-target="#changeServiceModal" data-toggle="modal" href="#">Chuyển tài khoản</a>
                                         <a class="dropdown-item" data-target="#logoutModal" data-toggle="modal" href="#">Đăng xuất</a>
                                     </div>
                                 </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="ml-80">
+                                <button class="btn btn-warning" data-toggle="modal" data-target="#readmeModal">READ ME</button>
                             </li>
                         }
                     </ul>
@@ -57,6 +65,8 @@
 
     <partial name="_ChangeServicePartial" />
     <partial name="_LogoutPartial" />
+    <partial name="_ReadMePartial" />
+
 
 
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,0 +1,98 @@
+﻿@model List<IG_Rating_Login_Service>
+@{
+    ViewData["Title"] = "FeedBack";
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Token</th>
+            <th scope="col">Service</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Feedback</th>
+            <th scope="col">
+                Timestamp
+                <select id="orderby" onchange="orderBy()">
+                    <option value="default">Sắp xếp</option>
+                    <option value="desc">Ngày giảm dần</option>
+                    <option value="asc">Ngày tăng dần</option>
+                </select>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody id="loadFeedBack">
+        @{
+            var index = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@item.loginToken</td>
+                <td>@item.IG_Service.serviceName</td>
+                <td>@item.ratingPoint</td>
+                <td>@item.feedback</td>
+                <td>@item.timestamp.ToString()</td>
+            </tr>
+
+            index = index + 1;
+        }
+    </tbody>
+</table>
+
+<script>
+    function orderBy() {
+        var select = $('#orderby').val();
+        console.log(select);
+        if (select.length > 0) {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("OrderByTimeStamp")",
+                data: { option: select },
+                dataType: "text",
+                success: function (msg) {
+                    loadData(JSON.parse(msg));
+                },
+                error: function (req, status, error) {
+                    console.log(error);
+                }
+            })
+       }
+    }
+
+    function loadData(jsonData) {
+        document.getElementById('loadFeedBack').innerHTML = "";
+        var html = "";
+        for (var i = 0; i < jsonData.length; i++) {
+            var item = jsonData[i];
+            html += templateTable(i, item);
+        }
+        document.getElementById('loadFeedBack').innerHTML = html;
+    }
+
+    function templateTable(index, jsonItem) {
+        var dateString = new Date(jsonItem.timestamp);
+        var dd = String(dateString.getDate()).padStart(2, '0');
+        var MM = String(dateString.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = dateString.getFullYear();
+        var hh = dateString.getUTCHours();
+        var mm = dateString.getUTCMinutes();
+        var ss = dateString.getUTCSeconds();
+        var ampm = hh >= 12 ? 'PM' : 'AM';
+        var date = MM + "/" + dd + "/" + yyyy + " " + hh + ":" + mm + ":" + ss + " " + ampm;
+        console.log(jsonItem);
+        var template = `<tr>
+                <th scope="row">${index+1}</th>
+                <td>${jsonItem.loginToken}</td>
+                <td>${jsonItem.iG_Service.serviceName}</td>
+                <td>${jsonItem.ratingPoint}</td>
+                <td>${jsonItem.feedback}</td>
+                <td>${date}</td>
+            </tr>`
+
+        return template;
+    }
+</script>
+

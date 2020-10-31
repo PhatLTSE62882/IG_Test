@@ -66,14 +66,8 @@
         }
     }
 
-    function setErrorById(id, errorMsg) {
-        document.getElementById(id).innerText = errorMsg;
-    }
-
     function loginService() {
         var passcode = $('#inputPassword').val();
-        console.log(passcode);
-        console.log(serviceCode)
 
         if (passcode == null || passcode == undefined || passcode.length == 0) {
             setErrorById('passcode-error', 'Vui lòng nhập passcode');

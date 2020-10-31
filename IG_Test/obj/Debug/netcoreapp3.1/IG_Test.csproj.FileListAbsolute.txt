@@ -163,3 +163,5 @@ C:\Users\ADMIN\source\repos\IG_Test\IG_Test\obj\Debug\netcoreapp3.1\Razor\Views\
 C:\Users\ADMIN\source\repos\IG_Test\IG_Test\obj\Debug\netcoreapp3.1\Razor\Views\Rating\Success.cshtml.g.cs
 C:\Users\ADMIN\source\repos\IG_Test\IG_Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Users\ADMIN\source\repos\IG_Test\IG_Test\obj\Debug\netcoreapp3.1\IG_Test.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test\obj\Debug\netcoreapp3.1\Razor\Views\Rating\FeedBack.cshtml.g.cs
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ReadMePartial.cshtml.g.cs
