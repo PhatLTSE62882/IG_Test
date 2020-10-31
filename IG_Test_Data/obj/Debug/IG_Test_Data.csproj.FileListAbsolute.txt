@@ -1,0 +1,11 @@
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\IG_Test_Data.dll.config
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\IG_Test_Data.dll
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\IG_Test_Data.pdb
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\EntityFramework.dll
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\EntityFramework.xml
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\obj\Debug\IG_Test_Data.csproj.CopyComplete
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\obj\Debug\IG_Test_Data.dll
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\obj\Debug\IG_Test_Data.pdb
+C:\Users\ADMIN\source\repos\IG_Test\IG_Test_Data\obj\Debug\IG_Test_Data.csprojAssemblyReference.cache

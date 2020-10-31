@@ -1,0 +1,135 @@
+﻿  <!-- Modal -->
+<div id="changeServiceModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title float-left">Vui lòng nhập passcode</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div style="width:100%">
+                            <div class="card card-signin my-5">
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <img style="height:50px;width:50px" src="~/assets/images/login/arrow-button.png" />
+                                    </div>
+                                    <form class="form-signin">
+                                        <div class="form-label-group">
+                                            <label for="inputPassword" style="color:silver">Passcode</label>
+                                            <div class="row">
+                                                <div class="col-md-11">
+                                                    <input type="password" style="border-bottom:1px solid black" id="inputPassword" class="form-control" placeholder="" required>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p style="color:red" id="passcode-error"></p>
+                                        <br>
+                                        <br>
+
+                                        <label style="color:silver"><strong>Chọn loại dịch vụ</strong></label>
+                                        <div class="row" id="loadService">
+
+                                        </div>
+                                        <p style="color:red" id="service-error"></p>
+
+                                        <hr class="my-4">
+                                        <button class="btn btn-lg btn-danger btn-block text-uppercase" onclick="loginService()" type="button">Đổi dịch vụ</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var serviceCode = "";
+    $(document).ready(() => {
+        loadService();
+    })
+    function templateService(jsonItem) {
+        var html = "";
+        for (var i = 0; i < jsonItem.length; i++) {
+            var template = `<div class="col-md-5 text-center pointer border-service" style="border: 1px solid deeppink;"
+                                                         onclick="chooseServiceModal('SERVICE_CODE')"
+                                                         data-id="SERVICE_CODE">
+                                                        <img src="/IMAGE_SOURCE" class="img-center" alt="Alternate Text" />
+                                                        <h6 class="text-center" style="color:red"> SERVICE_NAME </h6>
+                                                    </div>`;
+            var item = jsonItem[i];
+            template = template.replace("SERVICE_CODE", item.serviceCode).replace('SERVICE_CODE', item.serviceCode).replace('IMAGE_SOURCE', item.serviceImage).replace('SERVICE_NAME', item.serviceName);
+            html += template;
+        }
+        document.getElementById('loadService').innerHTML = html;
+    }
+
+    function loadService() {
+           $.ajax({
+            type: "GET",
+            url: "@Url.Action("Service","Home")",
+            success: function (msg) {
+                templateService(msg);
+            },
+               error: function (req, status, error) {
+                   console.log(error);
+            }
+        });
+    }
+
+    function chooseServiceModal(item) {
+        var element = $('[data-id=' + item + ']');
+        serviceCode = item;
+        if (element.css('background-color') != 'rgba(0, 0, 0, 0)') {
+            element.css('background-color', 'transparent');
+        } else {
+            element.css('background-color', 'silver');
+        }
+    }
+
+    function setErrorById(id, errorMsg) {
+        document.getElementById(id).innerText = errorMsg;
+    }
+
+    function loginService() {
+        var passcode = $('#inputPassword').val();
+        console.log(passcode);
+        console.log(serviceCode)
+
+        if (passcode == null || passcode == undefined || passcode.length == 0) {
+            setErrorById('passcode-error', 'Vui lòng nhập passcode');
+            return;
+        } else {
+            setErrorById('passcode-error', '');
+        }
+        if (serviceCode.length == 0) {
+            setErrorById('service-error', 'Vui lòng chọn dịch vụ');
+            return;
+        }else {
+            setErrorById('service-error', '');
+        }
+
+            $.ajax({
+            type: "POST",
+            url: "@Url.Action("Login","Account")",
+            data: { serviceCode: serviceCode, passCode: passcode},
+            dataType: "text",
+            success: function (msg) {
+                window.location.href = "/rating/rate";
+            },
+            error: function (req, status, error) {
+                setErrorById('passcode-error', 'Vui lòng kiểm tra lại passcode');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "Rate";
+    var serviceCode = HttpContextAccessor.HttpContext.Session.GetString(Constant_Login.SERVICE);
+}
+<div class="container">
+    <h1 class="text-center">ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ</h1>
+    <h5 class="text-center" style="color:silver">Bạn đang đánh giá chi nhánh <strong>Phan Chu Trinh</strong></h5>
+
+    <div class="row" style="margin-left:150px!important">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            @if (serviceCode != null && serviceCode.Length > 0)
+                            {
+                                if (serviceCode.Equals(Constant_Service.IGVESINH))
+                                {
+                                    <h5 class="text-center ml-5">
+                                        Bạn thấy lớp học, văn phòng của ALT IELTS Gia Sư có <strong style="color:deeppink">Sạch sẽ</strong> không?
+                                    </h5>
+                                }
+                                else if (serviceCode.Equals(Constant_Service.IGBAOVE))
+                                {
+                                    <h5 class="text-center ml-5">
+                                        Bạn có hài lòng với dịch vụ <strong style="color:deeppink">Bảo vệ </strong> của ALT IELTS Gia Sư không?
+                                    </h5>
+                                }
+
+                            }
+                            <div class="text-center" id="emoji">
+                            </div>
+                            <div class="text-center">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <img class="pointer" onclick="rate('@i')" data-index="@i" src="~/assets/images/star-not-rating.png" style="height:35px;width:35px" />
+                                }
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+                        <div class="clearfix"></div>
+                        <div class="text-center">
+                            <textarea class="form-control" id="feedback" style="height:250px" placeholder="Xin cho biết góp ý của bạn để chúng tôi có thể cải thiện dịch vụ tốt hơn"></textarea>
+                        </div>
+                        <br />
+                        <div class="text-center">
+                            <button class="btn btn-danger" style="width:200px" id="submit-rate" onclick="submitRate()">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var point = 0;
+    function submitRate() {
+        var feedback = $('#feedback').val();
+        console.log(feedback);
+        console.log(point);
+
+        var buttonSubmit = $('#submit-rate');
+        buttonSubmit.text("Đang gửi");
+        buttonSubmit.attr('disabled', 'true');
+
+           setTimeout(() => {
+            $.ajax({
+            type: "POST",
+             url: "@Url.Action("Rate")",
+             data: { point: point, feedback: feedback },
+            dataType: "text",
+             success: function (msg) {
+                window.location.href = "/rating/success";
+            },
+            error: function (req, status, error) {
+                window.location.href = "/account/login";
+               }
+              });
+           }, 500);
+
+
+    }
+    function rate(index) {
+        for (var i = 0; i <= index; i++) {
+            var element = $('.pointer').get(i);
+            element.setAttribute('src', '/assets/images/star.png');
+        }
+
+        for (var i = 4; i > index; i--) {
+            var element = $('.pointer').get(i);
+            element.setAttribute('src', '/assets/images/star-not-rating.png');
+        }
+        rateEmoji(index);
+        point = parseInt(index)+1;
+    }
+    function rateEmoji(index) {
+        var imageEmoji = "";
+        var textEmoji = "";
+
+        if (index == 0) {
+            imageEmoji = `<img style="height:50px;width:50px" src="/assets/images/emoji/crying.png"/>`;
+            textEmoji = "<h6>" + "Rất không sạch sẽ" + "</h6>";
+        } else if (index == 1) {
+            imageEmoji = `<img style="height:50px;width:50px" src="/assets/images/emoji/sad.png"/>`;
+            textEmoji = "<h6>" + "Không sạch sẽ" + "</h6>";
+        }
+        else if (index == 2) {
+            imageEmoji = `<img style="height:50px;width:50px" src="/assets/images/emoji/happy.png"/>`;
+            textEmoji = "<h6>" + "Chap nhận được" + "</h6>";
+        }
+        else if (index == 3) {
+            imageEmoji = `<img style="height:50px;width:50px" src="/assets/images/emoji/smile.png"/>`;
+            textEmoji = "<h6>" + "Sạch sẽ" + "</h6>";
+        }
+        else if (index == 4) {
+            imageEmoji = `<img style="height:50px;width:50px" src="/assets/images/emoji/in-love.png"/>`;
+            textEmoji = "<h6>" + "Rất sạch sẽ" + "</h6>";
+        }
+        document.getElementById('emoji').innerHTML = "";
+        document.getElementById('emoji').innerHTML += imageEmoji;
+        document.getElementById('emoji').innerHTML += textEmoji;
+    }
+</script>

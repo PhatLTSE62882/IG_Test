@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IELTS_GiaSuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="IG_Login_Service">
+          <Key>
+            <PropertyRef Name="loginToken" />
+          </Key>
+          <Property Name="loginToken" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="timestamp" Type="datetime" />
+          <Property Name="serviceCode" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="IG_Rating_Login_Service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="loginToken" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="serviceCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="timestamp" Type="datetime" />
+          <Property Name="ratingPoint" Type="int" />
+          <Property Name="feedback" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="IG_Service">
+          <Key>
+            <PropertyRef Name="serviceCode" />
+          </Key>
+          <Property Name="serviceCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="serviceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="servicePasscode" Type="varchar" MaxLength="20" />
+          <Property Name="serviceImage" Type="varchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_IG_Login_Service_IG_Service">
+          <End Role="IG_Service" Type="Self.IG_Service" Multiplicity="0..1" />
+          <End Role="IG_Login_Service" Type="Self.IG_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Service">
+              <PropertyRef Name="serviceCode" />
+            </Principal>
+            <Dependent Role="IG_Login_Service">
+              <PropertyRef Name="serviceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IG_Rating_Login_Service_IG_Login_Service1">
+          <End Role="IG_Login_Service" Type="Self.IG_Login_Service" Multiplicity="1" />
+          <End Role="IG_Rating_Login_Service" Type="Self.IG_Rating_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Login_Service">
+              <PropertyRef Name="loginToken" />
+            </Principal>
+            <Dependent Role="IG_Rating_Login_Service">
+              <PropertyRef Name="loginToken" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IG_Rating_Login_Service_IG_Service">
+          <End Role="IG_Service" Type="Self.IG_Service" Multiplicity="1" />
+          <End Role="IG_Rating_Login_Service" Type="Self.IG_Rating_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Service">
+              <PropertyRef Name="serviceCode" />
+            </Principal>
+            <Dependent Role="IG_Rating_Login_Service">
+              <PropertyRef Name="serviceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IELTS_GiaSuModelStoreContainer">
+          <EntitySet Name="IG_Login_Service" EntityType="Self.IG_Login_Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IG_Rating_Login_Service" EntityType="Self.IG_Rating_Login_Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IG_Service" EntityType="Self.IG_Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IG_Login_Service_IG_Service" Association="Self.FK_IG_Login_Service_IG_Service">
+            <End Role="IG_Service" EntitySet="IG_Service" />
+            <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Login_Service1" Association="Self.FK_IG_Rating_Login_Service_IG_Login_Service1">
+            <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+            <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Service" Association="Self.FK_IG_Rating_Login_Service_IG_Service">
+            <End Role="IG_Service" EntitySet="IG_Service" />
+            <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IELTS_GiaSuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IELTS_GiaSuEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="IG_Login_Service" EntityType="IELTS_GiaSuModel.IG_Login_Service" />
+          <EntitySet Name="IG_Rating_Login_Service" EntityType="IELTS_GiaSuModel.IG_Rating_Login_Service" />
+          <EntitySet Name="IG_Service" EntityType="IELTS_GiaSuModel.IG_Service" />
+          <EntitySet Name="sysdiagrams" EntityType="IELTS_GiaSuModel.sysdiagram" />
+          <AssociationSet Name="FK_IG_Login_Service_IG_Service" Association="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service">
+            <End Role="IG_Service" EntitySet="IG_Service" />
+            <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Login_Service" Association="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service">
+            <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+            <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Service" Association="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service">
+            <End Role="IG_Service" EntitySet="IG_Service" />
+            <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="IG_Login_Service">
+          <Key>
+            <PropertyRef Name="loginToken" />
+          </Key>
+          <Property Name="loginToken" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="timestamp" Type="DateTime" Precision="3" />
+          <Property Name="serviceCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IG_Service" Relationship="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service" FromRole="IG_Login_Service" ToRole="IG_Service" />
+          <NavigationProperty Name="IG_Rating_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service" FromRole="IG_Login_Service" ToRole="IG_Rating_Login_Service" />
+        </EntityType>
+        <EntityType Name="IG_Rating_Login_Service">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="loginToken" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="serviceCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="timestamp" Type="DateTime" Precision="3" />
+          <Property Name="ratingPoint" Type="Int32" />
+          <Property Name="feedback" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IG_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service" FromRole="IG_Rating_Login_Service" ToRole="IG_Login_Service" />
+          <NavigationProperty Name="IG_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service" FromRole="IG_Rating_Login_Service" ToRole="IG_Service" />
+        </EntityType>
+        <EntityType Name="IG_Service">
+          <Key>
+            <PropertyRef Name="serviceCode" />
+          </Key>
+          <Property Name="serviceCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="serviceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="servicePasscode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="IG_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service" FromRole="IG_Service" ToRole="IG_Login_Service" />
+          <NavigationProperty Name="IG_Rating_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service" FromRole="IG_Service" ToRole="IG_Rating_Login_Service" />
+          <Property Name="serviceImage" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_IG_Login_Service_IG_Service">
+          <End Type="IELTS_GiaSuModel.IG_Service" Role="IG_Service" Multiplicity="0..1" />
+          <End Type="IELTS_GiaSuModel.IG_Login_Service" Role="IG_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Service">
+              <PropertyRef Name="serviceCode" />
+            </Principal>
+            <Dependent Role="IG_Login_Service">
+              <PropertyRef Name="serviceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IG_Rating_Login_Service_IG_Login_Service">
+          <End Type="IELTS_GiaSuModel.IG_Login_Service" Role="IG_Login_Service" Multiplicity="1" />
+          <End Type="IELTS_GiaSuModel.IG_Rating_Login_Service" Role="IG_Rating_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Login_Service">
+              <PropertyRef Name="loginToken" />
+            </Principal>
+            <Dependent Role="IG_Rating_Login_Service">
+              <PropertyRef Name="loginToken" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IG_Rating_Login_Service_IG_Service">
+          <End Type="IELTS_GiaSuModel.IG_Service" Role="IG_Service" Multiplicity="1" />
+          <End Type="IELTS_GiaSuModel.IG_Rating_Login_Service" Role="IG_Rating_Login_Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IG_Service">
+              <PropertyRef Name="serviceCode" />
+            </Principal>
+            <Dependent Role="IG_Rating_Login_Service">
+              <PropertyRef Name="serviceCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IELTS_GiaSuModelStoreContainer" CdmEntityContainer="IELTS_GiaSuEntities">
+          <EntitySetMapping Name="IG_Login_Service">
+            <EntityTypeMapping TypeName="IELTS_GiaSuModel.IG_Login_Service">
+              <MappingFragment StoreEntitySet="IG_Login_Service">
+                <ScalarProperty Name="serviceCode" ColumnName="serviceCode" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="loginToken" ColumnName="loginToken" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IG_Rating_Login_Service">
+            <EntityTypeMapping TypeName="IELTS_GiaSuModel.IG_Rating_Login_Service">
+              <MappingFragment StoreEntitySet="IG_Rating_Login_Service">
+                <ScalarProperty Name="feedback" ColumnName="feedback" />
+                <ScalarProperty Name="ratingPoint" ColumnName="ratingPoint" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="serviceCode" ColumnName="serviceCode" />
+                <ScalarProperty Name="loginToken" ColumnName="loginToken" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IG_Service">
+            <EntityTypeMapping TypeName="IELTS_GiaSuModel.IG_Service">
+              <MappingFragment StoreEntitySet="IG_Service">
+                <ScalarProperty Name="serviceImage" ColumnName="serviceImage" />
+                <ScalarProperty Name="servicePasscode" ColumnName="servicePasscode" />
+                <ScalarProperty Name="serviceName" ColumnName="serviceName" />
+                <ScalarProperty Name="serviceCode" ColumnName="serviceCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="IELTS_GiaSuModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IELTS_GiaSuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="IG_Login_Service">
+    <Key>
+      <PropertyRef Name="loginToken" />
+    </Key>
+    <Property Name="loginToken" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="timestamp" Type="datetime" />
+    <Property Name="serviceCode" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="IG_Rating_Login_Service">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="loginToken" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="serviceCode" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="timestamp" Type="datetime" />
+    <Property Name="ratingPoint" Type="int" />
+    <Property Name="feedback" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="IG_Service">
+    <Key>
+      <PropertyRef Name="serviceCode" />
+    </Key>
+    <Property Name="serviceCode" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="serviceName" Type="nvarchar" MaxLength="50" />
+    <Property Name="servicePasscode" Type="varchar" MaxLength="20" />
+    <Property Name="serviceImage" Type="varchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_IG_Login_Service_IG_Service">
+    <End Role="IG_Service" Type="Self.IG_Service" Multiplicity="0..1" />
+    <End Role="IG_Login_Service" Type="Self.IG_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Service">
+        <PropertyRef Name="serviceCode" />
+      </Principal>
+      <Dependent Role="IG_Login_Service">
+        <PropertyRef Name="serviceCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IG_Rating_Login_Service_IG_Login_Service1">
+    <End Role="IG_Login_Service" Type="Self.IG_Login_Service" Multiplicity="1" />
+    <End Role="IG_Rating_Login_Service" Type="Self.IG_Rating_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Login_Service">
+        <PropertyRef Name="loginToken" />
+      </Principal>
+      <Dependent Role="IG_Rating_Login_Service">
+        <PropertyRef Name="loginToken" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IG_Rating_Login_Service_IG_Service">
+    <End Role="IG_Service" Type="Self.IG_Service" Multiplicity="1" />
+    <End Role="IG_Rating_Login_Service" Type="Self.IG_Rating_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Service">
+        <PropertyRef Name="serviceCode" />
+      </Principal>
+      <Dependent Role="IG_Rating_Login_Service">
+        <PropertyRef Name="serviceCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="IELTS_GiaSuModelStoreContainer">
+    <EntitySet Name="IG_Login_Service" EntityType="Self.IG_Login_Service" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IG_Rating_Login_Service" EntityType="Self.IG_Rating_Login_Service" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="IG_Service" EntityType="Self.IG_Service" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_IG_Login_Service_IG_Service" Association="Self.FK_IG_Login_Service_IG_Service">
+      <End Role="IG_Service" EntitySet="IG_Service" />
+      <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Login_Service1" Association="Self.FK_IG_Rating_Login_Service_IG_Login_Service1">
+      <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+      <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Service" Association="Self.FK_IG_Rating_Login_Service_IG_Service">
+      <End Role="IG_Service" EntitySet="IG_Service" />
+      <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IELTS_GiaSuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="IELTS_GiaSuEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="IG_Login_Service" EntityType="IELTS_GiaSuModel.IG_Login_Service" />
+    <EntitySet Name="IG_Rating_Login_Service" EntityType="IELTS_GiaSuModel.IG_Rating_Login_Service" />
+    <EntitySet Name="IG_Service" EntityType="IELTS_GiaSuModel.IG_Service" />
+    <EntitySet Name="sysdiagrams" EntityType="IELTS_GiaSuModel.sysdiagram" />
+    <AssociationSet Name="FK_IG_Login_Service_IG_Service" Association="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service">
+      <End Role="IG_Service" EntitySet="IG_Service" />
+      <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Login_Service" Association="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service">
+      <End Role="IG_Login_Service" EntitySet="IG_Login_Service" />
+      <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IG_Rating_Login_Service_IG_Service" Association="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service">
+      <End Role="IG_Service" EntitySet="IG_Service" />
+      <End Role="IG_Rating_Login_Service" EntitySet="IG_Rating_Login_Service" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="IG_Login_Service">
+    <Key>
+      <PropertyRef Name="loginToken" />
+    </Key>
+    <Property Name="loginToken" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="timestamp" Type="DateTime" Precision="3" />
+    <Property Name="serviceCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="IG_Service" Relationship="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service" FromRole="IG_Login_Service" ToRole="IG_Service" />
+    <NavigationProperty Name="IG_Rating_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service" FromRole="IG_Login_Service" ToRole="IG_Rating_Login_Service" />
+  </EntityType>
+  <EntityType Name="IG_Rating_Login_Service">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="loginToken" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="serviceCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="timestamp" Type="DateTime" Precision="3" />
+    <Property Name="ratingPoint" Type="Int32" />
+    <Property Name="feedback" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="IG_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Login_Service" FromRole="IG_Rating_Login_Service" ToRole="IG_Login_Service" />
+    <NavigationProperty Name="IG_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service" FromRole="IG_Rating_Login_Service" ToRole="IG_Service" />
+  </EntityType>
+  <EntityType Name="IG_Service">
+    <Key>
+      <PropertyRef Name="serviceCode" />
+    </Key>
+    <Property Name="serviceCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="serviceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="servicePasscode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="IG_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Login_Service_IG_Service" FromRole="IG_Service" ToRole="IG_Login_Service" />
+    <NavigationProperty Name="IG_Rating_Login_Service" Relationship="IELTS_GiaSuModel.FK_IG_Rating_Login_Service_IG_Service" FromRole="IG_Service" ToRole="IG_Rating_Login_Service" />
+    <Property Name="serviceImage" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_IG_Login_Service_IG_Service">
+    <End Type="IELTS_GiaSuModel.IG_Service" Role="IG_Service" Multiplicity="0..1" />
+    <End Type="IELTS_GiaSuModel.IG_Login_Service" Role="IG_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Service">
+        <PropertyRef Name="serviceCode" />
+      </Principal>
+      <Dependent Role="IG_Login_Service">
+        <PropertyRef Name="serviceCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IG_Rating_Login_Service_IG_Login_Service">
+    <End Type="IELTS_GiaSuModel.IG_Login_Service" Role="IG_Login_Service" Multiplicity="1" />
+    <End Type="IELTS_GiaSuModel.IG_Rating_Login_Service" Role="IG_Rating_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Login_Service">
+        <PropertyRef Name="loginToken" />
+      </Principal>
+      <Dependent Role="IG_Rating_Login_Service">
+        <PropertyRef Name="loginToken" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IG_Rating_Login_Service_IG_Service">
+    <End Type="IELTS_GiaSuModel.IG_Service" Role="IG_Service" Multiplicity="1" />
+    <End Type="IELTS_GiaSuModel.IG_Rating_Login_Service" Role="IG_Rating_Login_Service" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="IG_Service">
+        <PropertyRef Name="serviceCode" />
+      </Principal>
+      <Dependent Role="IG_Rating_Login_Service">
+        <PropertyRef Name="serviceCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,73 @@
+﻿@{
+    var serviceCode = HttpContextAccessor.HttpContext.Session.GetString(Constant_Login.SERVICE);
+}
+<div id="logoutModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title float-left">Vui lòng nhập passcode</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div style="width:100%">
+                            <div class="card card-signin my-5">
+                                <div class="card-body">
+                                    <form class="form-signin">
+                                        <div class="form-label-group">
+                                            <label for="inputPassword" style="color:silver">Passcode</label>
+                                            <div class="row">
+                                                <div class="col-md-11">
+                                                    <input type="password" style="border-bottom:1px solid black" id="logoutPasscode" class="form-control" placeholder="" required>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p style="color:red" id="passcode-error"></p>
+                                        <br>
+                                        <br>
+                                        <hr class="my-4">
+                                        <button class="btn btn-lg btn-danger btn-block text-uppercase" onclick="logoutService()" type="button">Đăng xuất</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+      function logoutService() {
+        var passcode = $('#logoutPasscode').val();
+        console.log(passcode);
+
+        if (passcode == null || passcode == undefined || passcode.length == 0) {
+            setErrorById('passcode-error', 'Vui lòng nhập passcode');
+            return;
+        } else {
+            setErrorById('passcode-error', '');
+        }
+
+            $.ajax({
+            type: "POST",
+            url: "@Url.Action("Logout","Account")",
+            data: {serviceCode:'@serviceCode' ,passCode: passcode},
+            dataType: "text",
+            success: function (msg) {
+                window.location.href = "/Home/Index";
+            },
+            error: function (req, status, error) {
+                setErrorById('passcode-error', 'Vui lòng kiểm tra lại passcode');
+            }
+        });
+    }
+</script>

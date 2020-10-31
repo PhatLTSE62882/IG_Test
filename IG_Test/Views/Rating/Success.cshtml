@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "Success";
+}
+
+<div class="container">
+
+
+    <div class="row" style="margin-left:150px!important">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <div class="text-center" id="emoji">
+                                <img style="height:150px;width:150px" src="~/assets/images/emoji/Asset.png" alt="Alternate Text" />
+                            </div>
+                            <h3 class="text-center">Cảm ơn bạn đã đánh giá</h3>
+                            <h5 class="text-center">
+                                ALT IELTS Gia Sư sẽ nổ lực hơn để đem đến nhiều trải nghiệm thú vị trong thời gian tới .
+                            </h5>
+                            <h5 class="text-center">
+                                Hãy tiếp tục theo dõi chúng tôi tại <strong style="color:black">ieltsgiasu.com</strong>
+                            </h5>
+                            <button style="width:250px" onclick="backToRate()" class="btn btn-danger">
+                                Đánh giá lại từ đầu
+                                <span id="time-leave">
+
+                                </span>
+                            </button>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        timeLeave();
+    })
+
+    function backToRate() {
+        window.location.href = "/rating/rate";
+        clearInterval();
+    }
+
+    function timeLeave() {
+        var time = 5;
+        var element = $('#time-leave');
+        var interval = setInterval(() => {
+            element.text("(" + time + ")");
+            console.log(element);
+            time -= 1;
+            if (time == -1) {
+                clearInterval(interval);
+                window.location.href = "/rating/rate";
+            };
+        }, 1000);
+    }
+</script>
